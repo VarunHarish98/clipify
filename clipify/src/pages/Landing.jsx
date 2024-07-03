@@ -21,13 +21,19 @@ import {
   accordianQuest3,
 } from "@/constants/constants";
 import { useNavigate } from "react-router-dom";
+import { urlContextState } from "@/context";
 
 const Landing = () => {
   const [longUrl, setLongURL] = useState("");
   const navigate = useNavigate();
+  const { isAuthenticated, data } = urlContextState();
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (longUrl) navigate(`/auth?createNew=${longUrl}`);
+    if (longUrl) {
+      console.log(isAuthenticated, data);
+      if (isAuthenticated) navigate(`/dashboard?createNew=${longUrl}`);
+      else navigate(`/auth?createNew=${longUrl}`);
+    }
   };
   return (
     <div className="flex flex-col items-center">

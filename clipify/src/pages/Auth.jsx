@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Login from "@/components/Login";
 import SignUp from "@/components/SignUp";
+import { urlContextState } from "@/context";
 
 const Auth = () => {
   const [searchParams] = useSearchParams(); // React hook to search the query param of a url
+  const link = searchParams.get("createNew")
+  const navigate = useNavigate();
+  const {isAuthenticated, loading} = urlContextState();
+  
+  useEffect(() => {
+    if(isAuthenticated && !loading)
+      navigate(`/dashboard?createNew=${link ? link : ""}`)
+  }, [isAuthenticated, loading])
   return (
     <>
       <h2 className="text-5xl text-white font-extrabold text-center">

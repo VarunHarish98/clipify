@@ -12,38 +12,44 @@ import Error from "./Error";
 import { useEffect, useState } from "react";
 import { object, string } from "yup";
 import { BeatLoader } from "react-spinners";
+import useFetch from "@/Hooks/useFetch";
+import login from "@/db/auth";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { urlContextState } from "@/context";
 
 const Login = () => {
   const [errors, setErrors] = useState([]);
-  const [loadingIcon, setLoadingIcon] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  let [searchParams] = useSearchParams();
+  let link = searchParams.get("createNew");
+  const navigate = useNavigate();
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  const { loading, error, fn: fnLogin, data } = useFetch(login, formData);
+  const { fetchUser } = urlContextState();
+
   useEffect(() => {
-    console.log("Value is updated", loadingIcon);
-  }, [loadingIcon]);
+    if (!error && data)
+      navigate(`/dashboard?${link ? `createNew${link}` : ""}`);
+    fetchUser();
+  }, [data, error]);
+
   const handleLogin = async () => {
     setErrors([]);
-    console.log(loadingIcon);
     try {
-      setLoadingIcon(true);
-      console.log(loadingIcon);
       let formSchema = object({
         email: string().email("Email is required").required(),
         password: string().min(8, "Password is required").required(),
       });
       await formSchema.validate(formData, { abortEarly: false }); // Validate all fields, don't stop at first error
-      setLoadingIcon(false);
-      console.log(loadingIcon);
+      await fnLogin();
     } catch (error) {
       let errObj = {};
-      setLoadingIcon(false);
-      console.log(loadingIcon);
       error.inner?.forEach((err) => (errObj[err.path] = err.message)); //Refer mockYupError file for structure
       setErrors(errObj);
     }
@@ -55,7 +61,7 @@ const Login = () => {
         <CardDescription>
           to your account, if you already have one
         </CardDescription>
-        <Error message={"Some email error"} />
+        {error && <Error message={error} />}
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
@@ -80,8 +86,12 @@ const Login = () => {
         </div>
       </CardContent>
       <CardFooter>
-        <Button onClick={handleLogin} className="text-black">
-          {loadingIcon ? <BeatLoader size={10} color="#36d7b7" /> : Login}
+        <Button onClick={handleLogin} className="text-black bg-white">
+          {loading ? (
+            <BeatLoader size={10} color="#36d7b7" />
+          ) : (
+            <span className="text-black">Login</span>
+          )}
         </Button>
       </CardFooter>
     </Card>

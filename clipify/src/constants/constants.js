@@ -2,6 +2,7 @@ export const DEMO_NAMES = "Varun Harish";
 export const LOGIN = "Login";
 export const LOGOUT = "Logout";
 export const MY_LINKS = "My Links";
+export const SUPABASE_STORAGE_PATH = "storage/v1/object/public/profile_pic/";
 export const accordianQuest1 = "How does the Clipify URL shortener work?";
 export const accordianAns1 =
   "When you enter a long URL, our system generates a shorter version of that URL. THis shortened URL redirects to the originak long URL when accessed";

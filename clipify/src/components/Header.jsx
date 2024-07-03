@@ -12,10 +12,12 @@ import {
 } from "./ui/dropdown-menu";
 import { DEMO_NAMES, LOGIN, LOGOUT, MY_LINKS } from "@/constants/constants";
 import { LinkIcon, LogOut } from "lucide-react";
+import { urlContextState } from "@/context";
 
 const Header = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(false);
+  const {data} = urlContextState();
   const handleLoginClick = () => {
     navigate("/auth");
     setUser(!user);
@@ -37,7 +39,7 @@ const Header = () => {
             <DropdownMenuTrigger className="rounded-full w-10 border-white overflow-hidden">
               <Avatar>
                 <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>{DEMO_NAMES}</AvatarFallback>
+                <AvatarFallback>{data?.user_metadata?.name}</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

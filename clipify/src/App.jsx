@@ -1,45 +1,56 @@
-import { Link, RouterProvider, createBrowserRouter } from "react-router-dom"
-import AppLayout from "./layouts/app-layout"
-import Auth from "./pages/Auth"
-import Landing from "./pages/Landing"
-import LinkUrl from "./pages/LinkUrl"
-import { RedirectLink } from "./pages/Redirect-Link"
-import Dashboard from "./pages/Dashboard"
-import ErrorPage from "./Error/error-page"
+import { Link, RouterProvider, createBrowserRouter } from "react-router-dom";
+import AppLayout from "./layouts/app-layout";
+import Auth from "./pages/Auth";
+import Landing from "./pages/Landing";
+import LinkUrl from "./pages/LinkUrl";
+import { RedirectLink } from "./pages/Redirect-Link";
+import Dashboard from "./pages/Dashboard";
+import ErrorPage from "./Error/error-page";
+import UrlProvider from "./context";
+import RequireAuth from "./require-auth";
 
 const router = createBrowserRouter([
   {
-    element:<AppLayout />,
-    children : [
+    element: <AppLayout />,
+    children: [
       {
-        path:'/auth',
-        element:<Auth />
+        path: "/auth",
+        element: <Auth />,
       },
       {
-        path:'/',
-        element:<Landing />
+        path: "/",
+        element: <Landing />,
       },
       {
-        path:'/link/:id',
-        element:<LinkUrl />
+        path: "/link/:id",
+        element: (
+          <RequireAuth>
+            <LinkUrl />
+          </RequireAuth>
+        ),
       },
       {
-        path:'/:id',
-        element:<RedirectLink />
+        path: "/:id",
+        element: <RedirectLink />,
       },
       {
-        path:'/dashboard',
-        element:<Dashboard />
-      }
+        path: "/dashboard",
+        element: (
+          <RequireAuth>
+            <Dashboard />
+          </RequireAuth>
+        ),
+      },
     ],
-    errorElement: <ErrorPage />
-  }
-])
+    errorElement: <ErrorPage />,
+  },
+]);
 function App() {
-
   return (
-    <RouterProvider router={router} />
-  )
+    <UrlProvider>
+      <RouterProvider router={router} />
+    </UrlProvider>
+  );
 }
 
-export default App
+export default App;
