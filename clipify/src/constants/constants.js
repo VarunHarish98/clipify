@@ -13,3 +13,21 @@ export const accordianQuest3 =
   "What analytics are available for my shortened URLs?";
 export const accordianAns3 =
   "Analytics such as number of clicks, geolocation data of the clicks and device type for each of your shortened URLs";
+export const dummyLinkContent = [
+  {
+    qr_link:
+      "https://fastly.picsum.photos/id/17/2500/1667.jpg?hmac=HD-JrnNUZjFiP2UZQvWcKrgLoC_pc_ouUSWv8kHsJJY",
+    title: "YT Tut 1",
+    short_link: "https://www.youtube.com/watch?v=geIwBIuo-ug&t=5013s",
+    actual_link: "https://www.youtube.com/watch",
+    created_date: "new Date()",
+  },
+  {
+    qr_link:
+      "https://fastly.picsum.photos/id/17/2500/1667.jpg?hmac=HD-JrnNUZjFiP2UZQvWcKrgLoC_pc_ouUSWv8kHsJJY",
+    title: "YT Tut 2",
+    short_link: "https://www.youtube.com/watch?v=geIwBIuo-ug&t=5sdfsdf013s",
+    actual_link: "https://www.youtube.com/watch",
+    created_date: "new Date()",
+  },
+];

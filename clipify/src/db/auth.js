@@ -40,4 +40,9 @@ export const signUpUser = async ({ email, password, profile_pic, name }) => {
   return data;
 };
 
+export const signOutUser = async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) throw new Error(error?.message || "Something went wrong!!!");
+};
+
 export default login;

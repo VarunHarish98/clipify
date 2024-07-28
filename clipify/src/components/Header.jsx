@@ -10,18 +10,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { DEMO_NAMES, LOGIN, LOGOUT, MY_LINKS } from "@/constants/constants";
+import {LOGIN, LOGOUT, MY_LINKS } from "@/constants/constants";
 import { LinkIcon, LogOut } from "lucide-react";
 import { urlContextState } from "@/context";
+import { signOutUser } from "@/db/auth";
 
 const Header = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(false);
-  const {data} = urlContextState();
-  const handleLoginClick = () => {
-    navigate("/auth");
-    setUser(!user);
-  };
+  const { data, fetchUser } = urlContextState();
+  // const handleLoginClick = () => {
+  //   navigate("/auth");
+  //   // setUser(!);
+  // };
   return (
     <nav className="flex justify-between p-4 items-center">
       <Link to="/">
@@ -33,17 +34,24 @@ const Header = () => {
       </Link>
       <div className="">
         {user ? (
-          <Button onClick={handleLoginClick}>{LOGIN}</Button>
+          <Button
+            onClick={() => {
+              navigate("/auth");
+              setUser(false)
+            }}
+          >
+            {LOGIN}
+          </Button>
         ) : (
           <DropdownMenu>
             <DropdownMenuTrigger className="rounded-full w-10 border-white overflow-hidden">
               <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage src={data?.user_metadata?.profile_pic} />
                 <AvatarFallback>{data?.user_metadata?.name}</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuLabel>{DEMO_NAMES}</DropdownMenuLabel>
+              <DropdownMenuLabel>{data?.user_metadata?.name}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <LinkIcon className="w-4 mr-1" />
@@ -51,7 +59,11 @@ const Header = () => {
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-red-400"
-                onClick={() => setUser(!user)}
+                onClick={() => {
+                  signOutUser();
+                  navigate("/");
+                  setUser(true);    
+                }}
               >
                 <LogOut className="w-4 mr-2" />
                 {LOGOUT}

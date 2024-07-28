@@ -34,7 +34,7 @@ const Login = () => {
   const { fetchUser } = urlContextState();
 
   useEffect(() => {
-    if (!error && data)
+    if (error === null && data)
       navigate(`/dashboard?${link ? `createNew${link}` : ""}`);
     fetchUser();
   }, [data, error]);
