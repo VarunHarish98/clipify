@@ -83,8 +83,8 @@ const Dashboard = () => {
       {/* {data.title} */}
       {filterUrlData?.map((urlData) => {
         return (
-          <div key={urlData.id}>
-            <LinkCard />
+          <div className="py-4" >
+            <LinkCard key={urlData.id} urls={urlData} fetchUrls={fnUrls}/>
           </div>
         );
       })}
